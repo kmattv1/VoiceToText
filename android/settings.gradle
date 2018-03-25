@@ -1,5 +1,9 @@
 rootProject.name = 'VoiceText'
+
 include ':react-native-sound-recorder'
 project(':react-native-sound-recorder').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sound-recorder/android')
+
+include ':react-native-upload-file'
+project(':react-native-upload-file').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-upload-file/android')
 
 include ':app'
