@@ -6,29 +6,22 @@
 
 import React, {Component} from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    View,
     Button,
     SafeAreaView,
+    TextInput,
     Alert
 } from 'react-native';
 
 import SoundRecorder from 'react-native-sound-recorder';
 
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 var UploadFile = require('NativeModules').UploadFile;
 
 function upload(file) {
     var obj = {
-        uploadUrl: 'http://192.168.16.102:8000/', //https://test.com/upload/
+        uploadUrl: file.server, //https://test.com/upload/
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -65,10 +58,17 @@ function upload(file) {
 
 type Props = {};
 export default class App extends Component<Props> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            server: 'http://192.168.16.102:8000',
+            fileName: 'testFile'
+        };
+    }
 
-    startRecording() {
+    startRecording(filename) {
         SoundRecorder.start(
-            SoundRecorder.PATH_CACHE + '/test.aac',
+            SoundRecorder.PATH_CACHE + '/' + filename + '.aac',
             {
                 source: SoundRecorder.SOURCE_MIC,
                 format: SoundRecorder.FORMAT_AAC_ADTS,
@@ -83,36 +83,52 @@ export default class App extends Component<Props> {
             });
     }
 
-    stopRecording() {
+    stopRecording(filename, server) {
         SoundRecorder.stop()
             .then(function (response) {
                 Alert.alert('Recording stoped', JSON.stringify(response), [{
                     text: 'OK', onPress: () => {
                     }
-                }], {cancelable: true});
+                }], {cancelable: true})
                 upload({
-                    name: 'test',
+                    name: filename + '_' + new Date().toLocaleString() + '.aac',
                     path: response.path,
-                    type: 'audio/aac'
+                    type: 'audio/aac',
+                    server: server
                 });
                 console.log('stopped recording, audio file saved at: ' + JSON.stringify(path));
             });
     }
 
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Button title="Start" color="green" onPress={this.startRecording}/>
-                <Button title="Stop" color="red" onPress={this.stopRecording}/>
                 <Text style={styles.welcome}>
-                    Welcome to React Native!
+                    Hangfelismero 😄
                 </Text>
-                <Text style={styles.instructions}>
-                    To get started, edit App.js
-                </Text>
-                <Text style={styles.instructions}>
-                    {instructions}
-                </Text>
+                <Text>File nev:</Text>
+                <TextInput
+                    onChangeText={(fileName) => {
+                        this.setState({fileName: fileName})
+                    }}
+                    value={this.state.fileName}
+                    editable={true}
+                />
+                <Text>Szerver IP:</Text>
+                <TextInput
+                    onChangeText={(server) => {
+                        this.setState({server: server})
+                    }}
+                    value={this.state.server}
+                    editable={true}
+                />
+                <Button title="Start" color="green" onPress={() => {
+                    this.startRecording(this.state.fileName)
+                }}/>
+                <Button title="Stop" color="red" onPress={() => {
+                    this.stopRecording(this.state.fileName, this.state.server)
+                }}/>
             </SafeAreaView>
         );
     }
