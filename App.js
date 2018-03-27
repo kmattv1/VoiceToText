@@ -10,6 +10,7 @@ import {
     Text,
     Button,
     SafeAreaView,
+    View,
     TextInput,
     Alert
 } from 'react-native';
@@ -38,13 +39,15 @@ function upload(file) {
             filename: JSON.stringify(file.name)
         },
     };
-    Alert.alert('Upload File', '', [{
-        text: 'OK', onPress: () => {
-        }
-    }], {cancelable: true});
 
     UploadFile.upload(obj, (returnCode, returnMessage, resultData) => {
-        Alert.alert(returnCode.toString(), returnMessage + ' ' + JSON.stringify(resultData), [{
+        var message = "";
+        if (returnCode == 200) {
+            message = "Sikeres feltöltés!";
+        } else {
+            message = "Sikertelen feltöltés!";
+        }
+        Alert.alert(file.name.toString(), message, [{
             text: 'OK',
             onPress: () => {
             }
@@ -61,42 +64,40 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            server: 'http://192.168.16.102:8000',
+            server: 'http://193.25.100.94:8000',
             fileName: 'testFile'
         };
     }
 
     startRecording(filename) {
         SoundRecorder.start(
-            SoundRecorder.PATH_CACHE + '/' + filename + '.aac',
+            SoundRecorder.PATH_CACHE.concat('/').concat(filename).concat('.aac'),
             {
                 source: SoundRecorder.SOURCE_MIC,
                 format: SoundRecorder.FORMAT_AAC_ADTS,
                 encoder: SoundRecorder.ENCODER_AAC
             })
             .then(function () {
-                Alert.alert('Recording started', SoundRecorder.PATH_CACHE, [{
+                Alert.alert('Felvétel elindítva', SoundRecorder.PATH_CACHE, [{
                     text: 'OK', onPress: () => {
                     }
                 }], {cancelable: true});
-                console.log('started recording');
             });
     }
 
     stopRecording(filename, server) {
         SoundRecorder.stop()
             .then(function (response) {
-                Alert.alert('Recording stoped', JSON.stringify(response), [{
+                Alert.alert('Felvétel leállítva', 'Feltöltés ...', [{
                     text: 'OK', onPress: () => {
                     }
                 }], {cancelable: true})
                 upload({
-                    name: filename + '_' + new Date().toLocaleString() + '.aac',
+                    name: filename.concat('_').concat(new Date().valueOf()).concat('.aac'),
                     path: response.path,
                     type: 'audio/aac',
                     server: server
                 });
-                console.log('stopped recording, audio file saved at: ' + JSON.stringify(path));
             });
     }
 
@@ -104,33 +105,45 @@ export default class App extends Component<Props> {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.welcome}>
-                    Hangfelismero 😄
-                </Text>
-                <Text>File nev:</Text>
-                <TextInput
-                    onChangeText={(fileName) => {
-                        this.setState({fileName: fileName})
-                    }}
-                    value={this.state.fileName}
-                    editable={true}
-                />
-                <Text>Szerver IP:</Text>
-                <TextInput
-                    onChangeText={(server) => {
-                        this.setState({server: server})
-                    }}
-                    value={this.state.server}
-                    editable={true}
-                />
-                <Button title="Start" color="green" onPress={() => {
-                    this.startRecording(this.state.fileName)
-                }}/>
-                <Button title="Stop" color="red" onPress={() => {
-                    this.stopRecording(this.state.fileName, this.state.server)
-                }}/>
-            </SafeAreaView>
-        );
+                <View style={[{flexDirection: 'column', width: '100%'}, styles.elementsContainer]}>
+                    <View style={{backgroundColor: '#ee050b', width: '100%'}}>
+                        <Text style={styles.welcome}>
+                            Medatine 🚑
+                        </Text>
+                    </View>
+                    <View style={{backgroundColor: '#f5faf8'}}>
+                        <Text>File nev:</Text>
+                        <TextInput
+                            onChangeText={(fileName) => {
+                                this.setState({fileName: fileName})
+                            }}
+                            value={this.state.fileName}
+                            editable={true}
+                        />
+
+                        <Text>Szerver IP:</Text>
+                        <TextInput
+                            onChangeText={(server) => {
+                                this.setState({server: server})
+                            }}
+                            value={this.state.server}
+                            editable={true}
+                        />
+                    </View>
+                    <View style={[{flexDirection: 'row'}, styles.elementsContainer]}>
+                        <View style={{backgroundColor: '#f5faf8'}}>
+                            <Button title="Start" color="#28A917" onPress={() => {
+                                this.startRecording(this.state.fileName)
+                            }}/>
+                        </View>
+                        <View style={{backgroundColor: '#f5faf8'}}>
+                            <Button title="Stop" color="#EE050B" onPress={() => {
+                                this.stopRecording(this.state.fileName, this.state.server)
+                            }}/>
+                        </View>
+                    </View>
+                </View>
+            </SafeAreaView>);
     }
 }
 
@@ -139,16 +152,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#ffffff',
     },
     welcome: {
         fontSize: 20,
         textAlign: 'center',
+        color: '#fff1f8',
         margin: 10,
     },
     instructions: {
         textAlign: 'center',
-        color: '#333333',
+        color: '#fff1f8',
         marginBottom: 5,
     },
 });
