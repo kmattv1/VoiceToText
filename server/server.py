@@ -49,7 +49,6 @@ def transcribe_file(speech_file):
 
     text_file = open(speech_file+".txt", "w")
     for result in response.results:
-        print('Transcript: {}'.format(result.alternatives[0].transcript))
         text_file.write(result.alternatives[0].transcript)
     text_file.close()
 
