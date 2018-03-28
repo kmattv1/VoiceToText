@@ -47,9 +47,9 @@ def transcribe_file(speech_file):
         language_code='hu-HU')
     response = client.recognize(config, audio)
 
-    text_file = open(speech_file+".txt", "w")
+    text_file = open(speech_file+".txt", "wb")
     for result in response.results:
-        text_file.write(result.alternatives[0].transcript)
+        text_file.write(result.alternatives[0].transcript.encode("ISO 8859-1"))
     text_file.close()
 
 def _decode_str_if_py2(inputstr, encoding='utf-8'):
