@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-ftp')
     compile project(':react-native-sound-recorder')
     compile project(':react-native-upload-file')
     compile fileTree(dir: "libs", include: ["*.jar"])

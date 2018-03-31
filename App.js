@@ -15,48 +15,29 @@ import {
     Alert
 } from 'react-native';
 
+import FTP from 'react-native-ftp';
 import SoundRecorder from 'react-native-sound-recorder';
 
+function ftp_upload(toUpload){
+    let server = toUpload.server;
+    let password = toUpload.password;
+    let user = toUpload.userName;
+    let fileToUpload = toUpload.fileName;
 
-var UploadFile = require('NativeModules').UploadFile;
-
-function upload(file) {
-    var obj = {
-        uploadUrl: file.server, //https://test.com/upload/
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
+    FTP.setup(server, 21) //Setup host
+    FTP.login(user,password).then(
+        (result)=>{
+            FTP.uploadFile(fileToUpload, destination).then(
+                (result)=>{
+                    console.log(result);
+                    FTP.logout();
+                }
+            );
         },
-        files: [
-            {
-                name: 'files', //key name
-                filename: file.name, //the name which server will receive
-                filepath: file.path, //local file path
-                filetype: file.type, //file type
-            },
-        ],
-        fields: { //additional parameters
-            filename: JSON.stringify(file.name)
-        },
-    };
-
-    UploadFile.upload(obj, (returnCode, returnMessage, resultData) => {
-        var message = "";
-        if (returnCode == 200) {
-            message = "Sikeres feltöltés!";
-        } else {
-            message = "Sikertelen feltöltés!";
+        (error)=>{
+            alert(error);
         }
-        Alert.alert(file.name.toString(), message, [{
-            text: 'OK',
-            onPress: () => {
-            }
-        }], {cancelable: true});
-        if (returnCode == 201) {
-        }
-        else {
-        }
-    })
+    )
 }
 
 type Props = {};
@@ -65,7 +46,9 @@ export default class App extends Component<Props> {
         super(props);
         this.state = {
             server: 'http://193.25.100.94:8000',
-            fileName: 'testFile'
+            fileName: 'testFile',
+            userName: 'test',
+            password: 'test'
         };
     }
 
@@ -85,17 +68,17 @@ export default class App extends Component<Props> {
             });
     }
 
-    stopRecording(filename, server) {
+    stopRecording(filename, server, userName, password) {
         SoundRecorder.stop()
             .then(function (response) {
                 Alert.alert('Felvétel leállítva', 'Feltöltés ...', [{
                     text: 'OK', onPress: () => {
                     }
                 }], {cancelable: true})
-                upload({
-                    name: filename.concat('_').concat(new Date().valueOf()).concat('.aac'),
-                    path: response.path,
-                    type: 'audio/aac',
+                ftp_upload({
+                    fileName: response.path.concat('/').concat(filename.concat('_').concat(new Date().valueOf()).concat('.aac')),
+                    userName: userName,
+                    password: password,
                     server: server
                 });
             });
@@ -129,6 +112,24 @@ export default class App extends Component<Props> {
                             value={this.state.server}
                             editable={true}
                         />
+
+                        <Text>Felhasználónév:</Text>
+                        <TextInput
+                            onChangeText={(userName) => {
+                                this.setState({userName: userName})
+                            }}
+                            value={this.state.userName}
+                            editable={true}
+                        />
+
+                        <Text>Jelszó:</Text>
+                        <TextInput
+                            onChangeText={(password) => {
+                                this.setState({password: password})
+                            }}
+                            value={this.state.password}
+                            editable={true}
+                        />
                     </View>
                     <View style={[{flexDirection: 'row'}, styles.elementsContainer]}>
                         <View style={{backgroundColor: '#f5faf8'}}>
@@ -138,7 +139,11 @@ export default class App extends Component<Props> {
                         </View>
                         <View style={{backgroundColor: '#f5faf8'}}>
                             <Button title="Stop" color="#EE050B" onPress={() => {
-                                this.stopRecording(this.state.fileName, this.state.server)
+                                this.stopRecording(
+                                    this.state.fileName,
+                                    this.state.server,
+                                    this.state.userName,
+                                    this.state.password)
                             }}/>
                         </View>
                     </View>

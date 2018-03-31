@@ -4213,13 +4213,21 @@ react-is@^16.3.0-alpha.3:
   version "16.3.0-alpha.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.0-alpha.3.tgz#0960d927b2b17154897139c6329aa958e29a86c2"
 
+react-native-ftp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-ftp/-/react-native-ftp-1.0.0.tgz#25f2ca8598a67aa003d95bfc8a74c31df8d21d3a"
+
 react-native-sound-recorder@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-sound-recorder/-/react-native-sound-recorder-1.1.1.tgz#32d6052a70690361ad97ae7edce551a816248cb7"
 
-react-native@^0.54.2:
-  version "0.54.2"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.54.2.tgz#73786e7bf3f80b0b060ca0bfe5b192f9c2f253da"
+react-native-upload-file@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-upload-file/-/react-native-upload-file-0.1.1.tgz#cfb50943dcbde02a88001d4d7462685d1ca72e53"
+
+react-native@^0.54.4:
+  version "0.54.4"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.54.4.tgz#19c6c598f6acf04f1c032fe9a1812f0c640fa8b7"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"
