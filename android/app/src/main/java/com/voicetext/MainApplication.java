@@ -3,13 +3,12 @@ package com.voicetext;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.reactlibrary.RNFtpPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.reactlibrary.RNFtpPackage;
 import com.reactlibrary.RNSoundRecorderPackage;
-import com.yoloci.uploadfile.UploadFilePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,9 +25,8 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNFtpPackage(),
                     new RNSoundRecorderPackage(),
-                    new UploadFilePackage()
+                    new RNFtpPackage()
             );
         }
 

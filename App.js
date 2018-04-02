@@ -18,26 +18,44 @@ import {
 import FTP from 'react-native-ftp';
 import SoundRecorder from 'react-native-sound-recorder';
 
-function ftp_upload(toUpload){
+function ftp_upload(toUpload) {
     let server = toUpload.server;
     let password = toUpload.password;
     let user = toUpload.userName;
     let fileToUpload = toUpload.fileName;
+    let destination = 'voji';
 
-    FTP.setup(server, 21) //Setup host
-    FTP.login(user,password).then(
-        (result)=>{
+    FTP.setup(server, 21);
+    //Setup host
+    FTP.login(user, password).then(
+        (result) => {
+            Alert.alert('Login', JSON.stringify(result), [{
+                text: 'OK', onPress: () => {
+                }
+            }], {cancelable: true});
             FTP.uploadFile(fileToUpload, destination).then(
-                (result)=>{
-                    console.log(result);
+                (uresult) => {
+                    Alert.alert('Feltoltve', JSON.stringify(uresult), [{
+                        text: 'OK', onPress: () => {
+                        }
+                    }], {cancelable: true});
                     FTP.logout();
+                },
+                (error) => {
+                    Alert.alert('UP Hiba', JSON.stringify(error), [{
+                        text: 'OK', onPress: () => {
+                        }
+                    }], {cancelable: true});
                 }
             );
         },
-        (error)=>{
-            alert(error);
+        (error) => {
+            Alert.alert('Hiba', JSON.stringify(error), [{
+                text: 'OK', onPress: () => {
+                }
+            }], {cancelable: true});
         }
-    )
+    );
 }
 
 type Props = {};
@@ -45,10 +63,10 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            server: 'http://193.25.100.94:8000',
+            server: '136.243.4.31',
             fileName: 'testFile',
-            userName: 'test',
-            password: 'test'
+            userName: 'medatin',
+            password: 'kvkmaif2'
         };
     }
 
@@ -91,7 +109,7 @@ export default class App extends Component<Props> {
                 <View style={[{flexDirection: 'column', width: '100%'}, styles.elementsContainer]}>
                     <View style={{backgroundColor: '#ee050b', width: '100%'}}>
                         <Text style={styles.welcome}>
-                            Medatine 🚑
+                            Medatin 🚑
                         </Text>
                     </View>
                     <View style={{backgroundColor: '#f5faf8'}}>

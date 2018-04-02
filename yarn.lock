@@ -4221,10 +4221,6 @@ react-native-sound-recorder@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-sound-recorder/-/react-native-sound-recorder-1.1.1.tgz#32d6052a70690361ad97ae7edce551a816248cb7"
 
-react-native-upload-file@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-upload-file/-/react-native-upload-file-0.1.1.tgz#cfb50943dcbde02a88001d4d7462685d1ca72e53"
-
 react-native@^0.54.4:
   version "0.54.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.54.4.tgz#19c6c598f6acf04f1c032fe9a1812f0c640fa8b7"
