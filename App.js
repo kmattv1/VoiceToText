@@ -39,7 +39,6 @@ function ftp_upload(toUpload) {
                         text: 'OK', onPress: () => {
                         }
                     }], {cancelable: true});
-                    FTP.logout();
                 },
                 (error) => {
                     Alert.alert('UP Hiba', JSON.stringify(error), [{
@@ -72,7 +71,7 @@ export default class App extends Component<Props> {
 
     startRecording(filename) {
         SoundRecorder.start(
-            SoundRecorder.PATH_CACHE.concat('/').concat(filename).concat('.aac'),
+            SoundRecorder.PATH_CACHE.concat('/').concat(filename.concat('_').concat(new Date().valueOf())).concat('.aac'),
             {
                 source: SoundRecorder.SOURCE_MIC,
                 format: SoundRecorder.FORMAT_AAC_ADTS,
@@ -94,7 +93,7 @@ export default class App extends Component<Props> {
                     }
                 }], {cancelable: true})
                 ftp_upload({
-                    fileName: response.path.concat('/').concat(filename.concat('_').concat(new Date().valueOf()).concat('.aac')),
+                    fileName: response.path,
                     userName: userName,
                     password: password,
                     server: server
