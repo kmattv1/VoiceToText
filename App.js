@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import SoundRecorder from 'react-native-sound-recorder';
+import BackgroundTimer from 'react-native-background-timer';
 
 
 var UploadFile = require('NativeModules').UploadFile;
@@ -44,6 +45,7 @@ function upload(file) {
         var message = "";
         if (returnCode == 200) {
             message = "Sikeres feltöltés!";
+            message = message.concat(' ').concat(returnMessage);
         } else {
             message = "Sikertelen feltöltés!";
         }
@@ -65,9 +67,11 @@ export default class App extends Component<Props> {
         super(props);
         this.state = {
             server: 'http://193.25.100.94:8000',
-            fileName: 'testFile'
+            fileName: 'testFile',
         };
     }
+
+
 
     startRecording(filename) {
         SoundRecorder.start(
@@ -83,6 +87,11 @@ export default class App extends Component<Props> {
                     }
                 }], {cancelable: true});
             });
+
+        BackgroundTimer.runBackgroundTimer(() => {
+            this.stopRecording(this.state.fileName, this.state.server);
+            BackgroundTimer.stopBackgroundTimer();
+        }, 1500);
     }
 
     stopRecording(filename, server) {
@@ -108,7 +117,7 @@ export default class App extends Component<Props> {
                 <View style={[{flexDirection: 'column', width: '100%'}, styles.elementsContainer]}>
                     <View style={{backgroundColor: '#ee050b', width: '100%'}}>
                         <Text style={styles.welcome}>
-                            Medatine 🚑
+                            Medatin 🚑
                         </Text>
                     </View>
                     <View style={{backgroundColor: '#f5faf8'}}>
@@ -136,11 +145,11 @@ export default class App extends Component<Props> {
                                 this.startRecording(this.state.fileName)
                             }}/>
                         </View>
-                        <View style={{backgroundColor: '#f5faf8'}}>
-                            <Button title="Stop" color="#EE050B" onPress={() => {
-                                this.stopRecording(this.state.fileName, this.state.server)
-                            }}/>
-                        </View>
+                        {/*<View style={{backgroundColor: '#f5faf8'}}>*/}
+                            {/*<Button title="Stop" color="#EE050B" onPress={() => {*/}
+                                {/*this.stopRecording(this.state.fileName, this.state.server)*/}
+                            {/*}}/>*/}
+                        {/*</View>*/}
                     </View>
                 </View>
             </SafeAreaView>);
