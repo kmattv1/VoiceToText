@@ -3,9 +3,6 @@
 
 from __future__ import print_function
 import io
-from google.cloud import speech
-from google.cloud.speech import enums
-from google.cloud.speech import types
 import sys
 
 if sys.version_info >= (3, 0):
@@ -32,25 +29,16 @@ import socket
 import base64
 import functools
 from subprocess import call
+import subprocess
 
 def transcribe_file(speech_file):
-    call(["ffmpeg", "-i", speech_file, speech_file+".flac"])
-    client = speech.SpeechClient()
-
-    with io.open(speech_file+".flac", 'rb') as audio_file:
-        content = audio_file.read()
-
-    audio = types.RecognitionAudio(content=content)
-    config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncoding.FLAC,
-        sample_rate_hertz=16000,
-        language_code='hu-HU')
-    response = client.recognize(config, audio)
-
-    text_file = open(speech_file+".txt", "wb")
-    for result in response.results:
-        text_file.write(result.alternatives[0].transcript.encode("ISO 8859-1"))
-    text_file.close()
+    call(["ffmpeg", "-i", speech_file, speech_file+".wav"])
+    ouput = os.popen("python /root/tensorflow/tensorflow/examples/speech_commands/label_wav.py --graph=/root/my_frozen_graph.pb --labels=/root/conv_labels.txt --wav=" + speech_file + ".wav > " + speech_file + ".txt").readlines()
+    return(' '.join(ouput))
+    #text_file = open(speech_file+".txt", "wb")
+    #for result in response.results:
+    #    text_file.write(result.alternatives[0].transcript.encode("ISO 8859-1"))
+    #text_file.close()
 
 def _decode_str_if_py2(inputstr, encoding='utf-8'):
     "Will return decoded with given encoding *if* input is a string and it's Py2."

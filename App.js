@@ -45,7 +45,7 @@ function upload(file) {
         var message = "";
         if (returnCode == 200) {
             message = "Sikeres feltöltés!";
-            message = message.concat(' ').concat(returnMessage);
+            message = message.concat(' ').concat(returnMessage).concat(resultData);
         } else {
             message = "Sikertelen feltöltés!";
         }
@@ -88,10 +88,10 @@ export default class App extends Component<Props> {
                 }], {cancelable: true});
             });
 
-        BackgroundTimer.runBackgroundTimer(() => {
-            this.stopRecording(this.state.fileName, this.state.server);
-            BackgroundTimer.stopBackgroundTimer();
-        }, 1500);
+        // BackgroundTimer.runBackgroundTimer(() => {
+        //     this.stopRecording(this.state.fileName, this.state.server);
+        //     BackgroundTimer.stopBackgroundTimer();
+        // }, 1500);
     }
 
     stopRecording(filename, server) {
@@ -145,11 +145,11 @@ export default class App extends Component<Props> {
                                 this.startRecording(this.state.fileName)
                             }}/>
                         </View>
-                        {/*<View style={{backgroundColor: '#f5faf8'}}>*/}
-                            {/*<Button title="Stop" color="#EE050B" onPress={() => {*/}
-                                {/*this.stopRecording(this.state.fileName, this.state.server)*/}
-                            {/*}}/>*/}
-                        {/*</View>*/}
+                        <View style={{backgroundColor: '#f5faf8'}}>
+                            <Button title="Stop" color="#EE050B" onPress={() => {
+                                this.stopRecording(this.state.fileName, this.state.server)
+                            }}/>
+                        </View>
                     </View>
                 </View>
             </SafeAreaView>);
