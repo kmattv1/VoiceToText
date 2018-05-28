@@ -45,7 +45,7 @@ function upload(file) {
         var message = "";
         if (returnCode == 200) {
             message = "Sikeres feltöltés!";
-            message = message.concat(' ').concat(returnMessage).concat(resultData);
+            message = message.concat(' ').concat(returnMessage).concat(JSON.stringify(resultData));
         } else {
             message = "Sikertelen feltöltés!";
         }
@@ -66,7 +66,7 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            server: 'http://193.25.100.94:8000',
+            server: 'http://194.182.69.20:8000',
             fileName: 'testFile',
         };
     }
